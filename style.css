@@ -1,0 +1,470 @@
+:root {
+	--ios-blue: #007aff;
+	--ios-background-grouped: #fff;
+	--ios-background-page: #f2f2f7;
+	/* System Gray 6 Light */
+	--ios-separator-color: #c6c6c8;
+	/* Separator Light */
+	--ios-text-color: #000;
+	--ios-secondary-text-color: #3c3c43;
+	/* Gray Light */
+	--ios-placeholder-color: #c7c7cc;
+	/* System Gray 2 Light */
+	--ios-header-background: rgba(248, 248, 248, 0.85);
+	--ios-button-text-color: #fff;
+
+	/* Barvy pro notifikace (světlý režim) */
+	--ios-red: #ff3b30;
+	--ios-green: #34c759;
+
+	/* Barvy pro small action button (světlý režim) */
+	--ios-small-button-background: var(--ios-background-grouped);
+	--ios-small-button-background-active: #e5e5ea;
+}
+
+/* Barvy pro Dark Mode */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--ios-blue: #0A84FF;
+		/* iOS Blue Dark */
+		--ios-background-grouped: var(--ios-background-grouped-dark, #1c1c1e);
+		--ios-background-page: var(--ios-background-page-dark, #000000);
+		--ios-separator-color: var(--ios-separator-color-dark, #38383a);
+		--ios-text-color: var(--ios-text-color-dark, #ffffff);
+		--ios-secondary-text-color: var(--ios-secondary-text-color-dark, #8e8e93);
+		--ios-placeholder-color: var(--ios-placeholder-color-dark, #6D6D70);
+		--ios-header-background: var(--ios-header-background-dark, rgba(28, 28, 30, 0.85));
+		/* --ios-button-text-color: #fff; zůstává stejná */
+
+		/* Specifické barvy pro dark mode, pokud se liší od obecných proměnných */
+		--ios-background-page-dark: #000000;
+		/* System Background Primary Dark */
+		--ios-background-grouped-dark: #1c1c1e;
+		/* System Gray 6 Dark */
+		--ios-separator-color-dark: #38383a;
+		/* Separator Dark (Opaque) */
+		--ios-text-color-dark: #ffffff;
+		/* Label Dark - Primary */
+		--ios-secondary-text-color-dark: #8e8e93;
+		/* Label Dark - Secondary */
+		--ios-placeholder-color-dark: #6D6D70;
+		/* Placeholder Dark (odpovídá Label Tertiary) */
+		--ios-header-background-dark: rgba(28, 28, 30, 0.85);
+		/* Tmavší header s průsvitností */
+
+		/* Barvy pro notifikace (tmavý režim) */
+		--ios-red: var(--ios-red-dark, #FF453A);
+		--ios-green: var(--ios-green-dark, #30D158);
+		--ios-red-dark: #FF453A;
+		/* iOS Red Dark */
+		--ios-green-dark: #30D158;
+		/* iOS Green Dark */
+
+		/* Barvy pro small action button (tmavý režim) */
+		--ios-small-button-background: var(--ios-small-button-background-dark, #2c2c2e);
+		--ios-small-button-background-active: var(--ios-small-button-background-active-dark, #3c3c3e);
+		--ios-small-button-background-dark: #2c2c2e;
+		/* System Gray 5 Dark */
+		--ios-small-button-background-active-dark: #3c3c3e;
+	}
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background: var(--ios-background-page);
+	font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	display: flex;
+	flex-direction: column;
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	color: var(--ios-text-color);
+	font-size: 17px;
+}
+
+.app-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.app-header {
+	background-color: var(--ios-header-background);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	padding-top: env(safe-area-inset-top, 0px);
+	text-align: center;
+	border-bottom: 0.5px solid var(--ios-separator-color);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+	height: calc(44px + env(safe-area-inset-top, 0px));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+}
+
+.app-header h1 {
+	margin: 0;
+	font-size: 17px;
+	font-weight: 600;
+	color: var(--ios-text-color);
+	/* Aby se přebarvila i hlavička */
+}
+
+.controls-outer-container {
+	padding-top: calc(44px + env(safe-area-inset-top, 0px));
+	padding-bottom: env(safe-area-inset-bottom, 0px);
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.controls-container {
+	padding: 20px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.main-content-wrapper {
+	width: calc(100% - 30px);
+	max-width: 500px;
+	box-sizing: border-box;
+}
+
+.main-content {
+	background-color: var(--ios-background-grouped);
+	border-radius: 10px;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+	border: 0.5px solid var(--ios-separator-color);
+}
+
+#qrCanvas {
+	max-width: 100%;
+	max-height: 250px;
+	width: 220px;
+	height: 220px;
+	image-rendering: pixelated;
+	display: block;
+	aspect-ratio: 1 / 1;
+}
+
+.control-group,
+.dynamic-fields-wrapper fieldset.control-group {
+	background-color: var(--ios-background-grouped);
+	border-radius: 10px;
+	width: calc(100% - 30px);
+	max-width: 500px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: 0.5px solid var(--ios-separator-color);
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	padding: 0 15px;
+	gap: 10px;
+	border-bottom: 0.5px solid var(--ios-separator-color);
+	min-height: 44px;
+	box-sizing: border-box;
+}
+
+.form-row:last-child {
+	border-bottom: none;
+}
+
+.form-row label,
+.form-row .label-like {
+	flex-basis: auto;
+	min-width: 80px;
+	flex-shrink: 0;
+	font-size: 17px;
+	color: var(--ios-text-color);
+	text-align: left;
+	padding: 11px 0;
+}
+
+.dynamic-fields-wrapper .form-row label[for^="field-hiddenSSID"] {
+	flex-grow: 1;
+}
+
+
+.form-row input[type="text"],
+.form-row input[type="url"],
+.form-row input[type="email"],
+.form-row input[type="tel"],
+.form-row input[type="password"],
+.form-row input[type="number"],
+.form-row input[type="date"],
+/* Přidáno pro konzistenci */
+.form-row textarea,
+.form-row select {
+	flex-grow: 1;
+	border: none;
+	background-color: transparent;
+	padding: 11px 0;
+	font-size: 17px;
+	text-align: right;
+	color: var(--ios-secondary-text-color);
+	-webkit-appearance: none;
+	appearance: none;
+	outline: none;
+	width: 100%;
+}
+
+.form-row input[type="date"] {
+	/* iOS má vlastní picker, ale pro desktop a jiné OS */
+	min-width: 120px;
+	/* Aby se vešlo datum */
+}
+
+@media (prefers-color-scheme: dark) {
+	.form-row input[type="date"]::-webkit-calendar-picker-indicator {
+		filter: invert(1);
+		/* Zkusí invertovat ikonku kalendáře pro dark mode */
+	}
+}
+
+.form-row textarea {
+	text-align: left;
+	resize: vertical;
+	min-height: calc(44px * 1.5);
+	padding: 11px 0;
+}
+
+.form-row select {
+	background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.5%207.5l4.5%204%204.5-4%22%20stroke%3D%22%23c7c7cc%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
+	background-repeat: no-repeat;
+	background-position: right 5px center;
+	background-size: 12px;
+	padding-right: 25px;
+}
+
+@media (prefers-color-scheme: dark) {
+	.form-row select {
+		background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.5%207.5l4.5%204%204.5-4%22%20stroke%3D%22%238e8e93%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
+	}
+}
+
+.form-row input::placeholder,
+.form-row textarea::placeholder {
+	color: var(--ios-placeholder-color);
+}
+
+.form-row input::placeholder {
+	text-align: right;
+}
+
+.form-row textarea::placeholder {
+	text-align: left;
+}
+
+.form-row input[type="checkbox"] {
+	width: 22px;
+	height: 22px;
+	margin: 0;
+	padding: 0;
+	appearance: none;
+	-webkit-appearance: none;
+	background-color: var(--ios-background-grouped);
+	border: 1px solid var(--ios-separator-color);
+	border-radius: 4px;
+	position: relative;
+	cursor: pointer;
+	outline: none;
+	transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+	flex-shrink: 0;
+}
+
+.form-row input[type="checkbox"]:checked {
+	background-color: var(--ios-blue);
+	border-color: var(--ios-blue);
+	background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 9" width="12" height="9"><polyline points="1 4.5 4.5 8 11 1" stroke="%23FFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 10px 10px;
+}
+
+
+.color-inputs-container {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	flex-grow: 1;
+	gap: 15px;
+}
+
+.color-input-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.color-input-item .color-label {
+	font-size: 17px;
+	color: var(--ios-secondary-text-color);
+}
+
+input[type="color"] {
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border: 0.5px solid var(--ios-separator-color);
+	border-radius: 50%;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: transparent;
+	outline: none;
+	cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 2px;
+	box-sizing: border-box;
+}
+
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+	border-radius: 50%;
+}
+
+input[type="color"]::-moz-color-swatch {
+	border: none;
+	border-radius: 50%;
+}
+
+
+button.action-button {
+	background-color: var(--ios-blue);
+	color: var(--ios-button-text-color);
+	border: none;
+	font-weight: 500;
+	width: calc(100% - 30px);
+	max-width: 500px;
+	padding: 12px;
+	font-size: 17px;
+	border-radius: 10px;
+	display: block;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+button.action-button:active {
+	filter: brightness(0.85);
+	/* Jednoduchý efekt ztmavení pro aktivní stav */
+}
+
+button.small-action-button {
+	background-color: var(--ios-small-button-background);
+	color: var(--ios-blue);
+	border: none;
+	font-weight: normal;
+	padding: 8px 12px;
+	font-size: 15px;
+	border-radius: 8px;
+	display: inline-block;
+	width: auto;
+	cursor: pointer;
+}
+
+button.small-action-button:active {
+	background-color: var(--ios-small-button-background-active);
+}
+
+
+.dynamic-fields-wrapper {
+	width: calc(100% - 30px);
+	max-width: 500px;
+	box-sizing: border-box;
+}
+
+.dynamic-fields-wrapper fieldset.control-group {
+	width: 100%;
+	max-width: none;
+}
+
+
+#diagnosticMessageContainer {
+	width: calc(100% - 30px);
+	max-width: 500px;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+#diagnosticMessageContainer>p,
+#diagnosticMessage {
+	font-weight: normal;
+	text-align: center;
+	padding: 8px 15px;
+	border-radius: 8px;
+	margin-top: 0;
+	font-size: 14px;
+	line-height: 1.4;
+	display: inline-block;
+	width: auto;
+	max-width: 100%;
+	box-sizing: border-box;
+	border-width: 1px;
+	border-style: solid;
+}
+
+/* Styly pro chybovou zprávu (červená) */
+#diagnosticMessageContainer>p:not([style*="color:green"]),
+/* Pokud JS nenastaví zelenou */
+#diagnosticMessage {
+	color: var(--ios-red);
+	background-color: rgba(var(--ios-red), 0.1);
+	/* Použití proměnné i pro RGBA alpha */
+	border-color: rgba(var(--ios-red), 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+
+	#diagnosticMessageContainer>p:not([style*="color:green"]),
+	#diagnosticMessage {
+		background-color: rgba(255, 69, 58, 0.25);
+		/* Přímé hodnoty pro dark red tint */
+		border-color: rgba(255, 69, 58, 0.5);
+		color: var(--ios-red-dark);
+	}
+}
+
+
+/* Styly pro úspěšnou zprávu (zelená) - JS nastavuje inline color:green */
+#diagnosticMessageContainer>p[style*="color:green"] {
+	color: var(--ios-green);
+	background-color: rgba(var(--ios-green), 0.1);
+	border-color: rgba(var(--ios-green), 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+	#diagnosticMessageContainer>p[style*="color:green"] {
+		color: var(--ios-green-dark);
+		background-color: rgba(48, 209, 88, 0.2);
+		/* Přímé hodnoty pro dark green tint */
+		border-color: rgba(48, 209, 88, 0.4);
+	}
+}

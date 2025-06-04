@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-title" content="QR Gen">
+	<link rel="apple-touch-icon"
+		href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+	<meta name="theme-color" content="#EFEFF4" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+
+	<title>QR Generátor</title>
+	<link rel="icon"
+		href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+
+	<link rel="stylesheet" href="style.css">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"
+		integrity="sha512-PEhlWBZBrQL7flpJPY8lXx8tIN7HWX912GzGhFTDqA3iWFrakVH3lVHomCoU9BhfKzgxfEk6EG2C3xej+9srOQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+</head>
+
+<body>
+	<div class="app-container">
+		<header class="app-header">
+			<h1>QR Generátor</h1>
+		</header>
+
+		<div class="controls-outer-container">
+			<div class="controls-container">
+				<fieldset class="control-group">
+					<div class="form-row">
+						<label for="qrTypeSelect">Typ obsahu:</label>
+						<select id="qrTypeSelect">
+							<option value="text" selected>Text</option>
+							<option value="url">URL Adresa</option>
+							<option value="wifi">Wi-Fi Připojení</option>
+							<option value="geo">Geolokace</option>
+							<option value="email">E-mail</option>
+							<option value="tel">Telefonní číslo</option>
+							<option value="sms">SMS zpráva</option>
+							<option value="spayd">QR Platba (CZ)</option>
+							<option value="sepa">SEPA Platba (EUR)</option>
+							<!-- Další typy přijdou sem -->
+						</select>
+					</div>
+				</fieldset>
+
+				<div id="dynamic-form-fields-container" class="dynamic-fields-wrapper">
+					<!-- Pole se budou generovat sem -->
+				</div>
+
+				<fieldset class="control-group">
+					<div class="form-row">
+						<label for="ecLevel">Korekce chyb:</label>
+						<select id="ecLevel">
+							<option value="L">Nízká</option>
+							<option value="M" selected>Střední</option>
+							<option value="Q">Čtvrtinová</option>
+							<option value="H">Vysoká</option>
+						</select>
+					</div>
+					<div class="form-row">
+						<span class="label-like">Barvy kódu:</span>
+						<div class="color-inputs-container">
+							<div class="color-input-item">
+								<span class="color-label">Popředí:</span>
+								<input id="fgColor" type="color" value="#000000">
+							</div>
+							<div class="color-input-item">
+								<span class="color-label">Pozadí:</span>
+								<input id="bgColor" type="color" value="#ffffff">
+							</div>
+						</div>
+					</div>
+				</fieldset>
+
+				<div class="main-content-wrapper">
+					<!-- Obalovač pro main-content, pokud je potřeba další struktura/odsazení -->
+					<div class="main-content"> <canvas id="qrCanvas"></canvas> </div>
+				</div>
+
+				<button class="action-button" id="downloadPngButton">Stáhnout PNG</button>
+				<div id="diagnosticMessageContainer"></div> <!-- Tento kontejner bude mít stejnou šířku jako tlačítko -->
+			</div>
+		</div>
+	</div>
+
+	<script src="script.js" defer></script>
+</body>
+
+</html>
