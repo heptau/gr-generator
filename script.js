@@ -95,9 +95,9 @@ const qrCodeTypes = {
 	spayd: {
 		label: "QR Platba (CZ - SPAYD)",
 		fields: [
-			{ name: "spayd_iban", label: "IBAN (ACC)", type: "text", placeholder: "CZ12345678901234567890", inputmode: "text", pattern: "[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}" },
+			{ name: "spayd_iban", label: "IBAN (ACC)", type: "text", placeholder: "CZ12345678901234567890", inputmode: "text", autocapitalize: "characters", pattern: "[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}" },
 			{ name: "spayd_amount", label: "Částka (AM)", type: "number", placeholder: "123.45", step: "0.01", inputmode: "decimal" },
-			{ name: "spayd_currency", label: "Měna (CC)", type: "text", value: "CZK", readonly: true },
+			{ name: "spayd_currency", label: "Měna (CC)", type: "text", value: "CZK", autocapitalize: "characters", pattern: "[A-Z]{3}", maxLength: 3 },
 			{ name: "spayd_vs", label: "Var. symb. (X-VS)", type: "text", placeholder: "Max 10 čísel", inputmode: "numeric", maxLength: 10 },
 			{ name: "spayd_ks", label: "Konst. symb. (X-KS)", type: "text", placeholder: "Max 4 čísla", inputmode: "numeric", maxLength: 4 },
 			{ name: "spayd_ss", label: "Spec. symb. (X-SS)", type: "text", placeholder: "Max 10 čísel", inputmode: "numeric", maxLength: 10 },
@@ -148,10 +148,10 @@ const qrCodeTypes = {
 		label: "SEPA Platba (EUR)",
 		fields: [
 			{ name: "sepa_name", label: "Jméno příjemce", type: "text", placeholder: "Název Firmy s.r.o.", maxLength: 70 },
-			{ name: "sepa_iban", label: "IBAN příjemce", type: "text", placeholder: "DE12345678901234567890", inputmode: "text", pattern: "[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}" },
-			{ name: "sepa_bic", label: "BIC (SWIFT)", type: "text", placeholder: "BANKDEFFXXX", inputmode: "text", pattern: "[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?", maxLength: 11 },
+			{ name: "sepa_iban", label: "IBAN příjemce", type: "text", placeholder: "DE12345678901234567890", inputmode: "text", autocapitalize: "characters", pattern: "[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}" },
+			{ name: "sepa_bic", label: "BIC (SWIFT)", type: "text", placeholder: "BANKDEFFXXX", inputmode: "text", autocapitalize: "characters", pattern: "[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?", maxLength: 11 },
 			{ name: "sepa_amount", label: "Částka", type: "number", placeholder: "100.00", step: "0.01", inputmode: "decimal" },
-			{ name: "sepa_currency", label: "Měna", type: "text", value: "EUR", readonly: true },
+			{ name: "sepa_currency", label: "Měna", type: "text", value: "EUR", autocapitalize: "characters", pattern: "[A-Z]{3}", maxLength: 3 },
 			{ name: "sepa_reference", label: "Reference (Účel)", type: "text", placeholder: "Faktura 123", maxLength: 140 }, // Variabilní symbol nebo jiná reference
 			{ name: "sepa_message", label: "Zpráva (Pozn.)", type: "text", placeholder: "Poznámka k platbě", maxLength: 140 }
 		],
@@ -297,6 +297,22 @@ function renderQrTypeForm(typeKey) {
 			inputElement.name = field.name;
 			inputElement.placeholder = field.placeholder || "";
 			if (field.inputmode) inputElement.inputMode = field.inputmode;
+
+			if (field.autocapitalize) {
+				inputElement.autocapitalize = field.autocapitalize;
+				if (field.autocapitalize === "characters") {
+					inputElement.style.textTransform = "uppercase";
+					inputElement.addEventListener('input', function(e) {
+						// Uložíme aktuální pozici kurzoru
+						const start = this.selectionStart;
+						const end = this.selectionEnd;
+						// Převedeme hodnotu na velká písmena
+						this.value = this.value.toUpperCase();
+						// Obnovíme pozici kurzoru
+						this.setSelectionRange(start, end);
+					});
+				}
+			}
 
 			inputElement.addEventListener('input', updateQR);
 			row.appendChild(inputElement);

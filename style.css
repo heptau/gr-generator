@@ -83,33 +83,37 @@ body {
 	-webkit-tap-highlight-color: transparent;
 	color: var(--ios-text-color);
 	font-size: 17px;
+	overflow-y: auto;
 }
 
 .app-container {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	flex-grow: 1;
 	width: 100%;
-	overflow: hidden;
 }
 
 .app-header {
 	background-color: var(--ios-header-background);
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
-	padding-top: env(safe-area-inset-top, 0px);
 	text-align: center;
 	border-bottom: 0.5px solid var(--ios-separator-color);
-	position: fixed;
+	position: sticky;
 	top: 0;
 	left: 0;
 	right: 0;
 	z-index: 100;
-	height: calc(44px + env(safe-area-inset-top, 0px));
+	height: 44px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
+
+	/* Zohlednění safe area pro sticky hlavičku */
+	@supports (top: env(safe-area-inset-top)) {
+		top: env(safe-area-inset-top);
+	}
 }
 
 .app-header h1 {
@@ -117,11 +121,9 @@ body {
 	font-size: 17px;
 	font-weight: 600;
 	color: var(--ios-text-color);
-	/* Aby se přebarvila i hlavička */
 }
 
 .controls-outer-container {
-	padding-top: calc(44px + env(safe-area-inset-top, 0px));
 	padding-bottom: env(safe-area-inset-bottom, 0px);
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
@@ -211,7 +213,6 @@ body {
 	flex-grow: 1;
 }
 
-
 .form-row input[type="text"],
 .form-row input[type="url"],
 .form-row input[type="email"],
@@ -219,7 +220,6 @@ body {
 .form-row input[type="password"],
 .form-row input[type="number"],
 .form-row input[type="date"],
-/* Přidáno pro konzistenci */
 .form-row textarea,
 .form-row select {
 	flex-grow: 1;
@@ -236,15 +236,37 @@ body {
 }
 
 .form-row input[type="date"] {
-	/* iOS má vlastní picker, ale pro desktop a jiné OS */
 	min-width: 120px;
-	/* Aby se vešlo datum */
+}
+
+/* Styly pro malé obrazovky */
+@media (max-height: 430px) {
+	.app-header {
+		position: static;
+		top: auto;
+	}
+	.controls-outer-container {
+		padding-top: 0;
+	}
+
+	@supports (padding-top: env(safe-area-inset-top)) {
+		body {
+			padding-top: env(safe-area-inset-top);
+		}
+	}
+}
+
+@media not all and (max-height: 430px) {
+	@supports (padding-top: env(safe-area-inset-top)) {
+		body {
+			padding-top: 0 !important;
+		}
+	}
 }
 
 @media (prefers-color-scheme: dark) {
 	.form-row input[type="date"]::-webkit-calendar-picker-indicator {
 		filter: invert(1);
-		/* Zkusí invertovat ikonku kalendáře pro dark mode */
 	}
 }
 
@@ -308,7 +330,6 @@ body {
 	background-size: 10px 10px;
 }
 
-
 .color-inputs-container {
 	display: flex;
 	justify-content: flex-end;
@@ -356,7 +377,6 @@ input[type="color"]::-moz-color-swatch {
 	border-radius: 50%;
 }
 
-
 button.action-button {
 	background-color: var(--ios-blue);
 	color: var(--ios-button-text-color);
@@ -374,7 +394,6 @@ button.action-button {
 
 button.action-button:active {
 	filter: brightness(0.85);
-	/* Jednoduchý efekt ztmavení pro aktivní stav */
 }
 
 button.small-action-button {
@@ -394,7 +413,6 @@ button.small-action-button:active {
 	background-color: var(--ios-small-button-background-active);
 }
 
-
 .dynamic-fields-wrapper {
 	width: calc(100% - 30px);
 	max-width: 500px;
@@ -405,7 +423,6 @@ button.small-action-button:active {
 	width: 100%;
 	max-width: none;
 }
-
 
 #diagnosticMessageContainer {
 	width: calc(100% - 30px);
@@ -433,11 +450,9 @@ button.small-action-button:active {
 
 /* Styly pro chybovou zprávu (červená) */
 #diagnosticMessageContainer>p:not([style*="color:green"]),
-/* Pokud JS nenastaví zelenou */
 #diagnosticMessage {
 	color: var(--ios-red);
 	background-color: rgba(var(--ios-red), 0.1);
-	/* Použití proměnné i pro RGBA alpha */
 	border-color: rgba(var(--ios-red), 0.3);
 }
 
@@ -446,14 +461,12 @@ button.small-action-button:active {
 	#diagnosticMessageContainer>p:not([style*="color:green"]),
 	#diagnosticMessage {
 		background-color: rgba(255, 69, 58, 0.25);
-		/* Přímé hodnoty pro dark red tint */
 		border-color: rgba(255, 69, 58, 0.5);
 		color: var(--ios-red-dark);
 	}
 }
 
-
-/* Styly pro úspěšnou zprávu (zelená) - JS nastavuje inline color:green */
+/* Styly pro úspěšnou zprávu (zelená) */
 #diagnosticMessageContainer>p[style*="color:green"] {
 	color: var(--ios-green);
 	background-color: rgba(var(--ios-green), 0.1);
@@ -464,7 +477,7 @@ button.small-action-button:active {
 	#diagnosticMessageContainer>p[style*="color:green"] {
 		color: var(--ios-green-dark);
 		background-color: rgba(48, 209, 88, 0.2);
-		/* Přímé hodnoty pro dark green tint */
 		border-color: rgba(48, 209, 88, 0.4);
 	}
 }
+
